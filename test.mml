@@ -1,0 +1,6 @@
+let fun is_even n = if n = 0 then true else is_odd(n - 1)
+    and is_odd n = if n = 0 then false else is_even(n - 1)
+in (
+	print(is_even(32));
+	print(is_odd(32))
+) end

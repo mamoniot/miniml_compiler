@@ -1,0 +1,66 @@
+
+let fun collatz n =
+	if n = 1 then 1::nil else (if n%2 = 0 then n::collatz(n/2) else n::collatz(3*n + 1))
+end
+let fun is_perfect_square n =
+	let fun squares_to_n i =
+		if i*i > n then false else (if i*i = n then true else squares_to_n(i + 1))
+	end
+	squares_to_n(1)
+end
+let fun primes_to n =
+	let fun is_prime i =
+		let fun test j =
+			if j > i/2 then true else (if i%j = 0 then false else test(j + 1))
+		end
+		test(2)
+	end
+	let fun seq_prime i =
+		if i > n then nil else (if is_prime(i) then i::seq_prime(i + 1) else seq_prime(i + 1))
+	end
+	seq_prime(2)
+end
+let fun digit_has n = fn pred =>
+	if pred(n%10) then true else (if n/10 > 0 then digit_has(n/10)(pred))
+end
+let fun only_those vars = fn pred =>
+	if null(vars) then nil
+	else (
+		let val x = hd(vars) end
+		if pred(x) then x::only_those(tl(vars))(pred) else only_those(tl(vars))(pred)
+	)
+end
+let fun do_over vars = fn f =>
+	if null(vars) then nil else f(hd(vars))::do_over(tl(vars))(f)
+end
+let fun prefix_sum xs =
+	let fun sum xs = fn n =>
+		if n = 0 then 0 else hd(xs) + sum(tl(xs))(n - 1)
+	end
+	let fun size xs =
+		if null(xs) then 0 else 1 + size(tl(xs))
+	end
+	let val xs_size = size(xs) end
+	let fun for_each i =
+		if i > xs_size then nil else sum(xs)(i)::for_each(i + 1)
+	end
+	for_each(0)
+end
+let fun suffix_sum xs =
+	let fun sum xs =
+		if null(xs) then 0 else hd(xs) + sum(tl(xs))
+	end
+	sum(xs)::(if null(xs) then nil else suffix_sum(tl(xs)))
+end
+(
+	print(collatz(3));
+	print(is_perfect_square(99));
+	print(is_perfect_square(100));
+	print(primes_to(97));
+	print(digit_has(12345)(fn x => x%2 = 0));
+	print(digit_has(13579)(fn x => x%2 = 0));
+	print(only_those(1::2::3::4::5::6::nil)(fn x => x%2 = 0));
+	print(do_over(1::2::3::4::5::6::nil)(fn x => x%2 = 0));
+	print(prefix_sum(1000::200::30::4::nil));
+	print(suffix_sum(1000::200::30::4::nil))
+)

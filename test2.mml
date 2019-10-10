@@ -1,0 +1,11 @@
+let val succ = fn n => n + 100 in 
+let val applyTwice = fn f => fn n => f . (f . n) in
+let val applyMore = fn applier => fn f => fn n => f . ((applier . f) . n ) in
+let val tryThis = applyMore . applyTwice . succ in
+tryThis . 42
+end
+end
+end
+end
+
+
